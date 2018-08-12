@@ -1,7 +1,6 @@
 import React from 'react';
 import './InfoForm.css'
 import { Container, Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
-import InfoShow from './InfoShow';
 
 class InfoForm extends React.Component {
 
@@ -15,7 +14,7 @@ class InfoForm extends React.Component {
             job: "",
             bio: "",
             phone: "",
-            submitted: 0
+            submitted: false,
 
         };
         this.handleChange = this.handleChange.bind(this);
@@ -33,27 +32,17 @@ class InfoForm extends React.Component {
     }
 
     handleSubmit(event) {
+        event.preventDefault();
         this.setState((prevState) => {
             return {
-                submitted: prevState.submitted + 1
+                submitted: !prevState.submitted 
             }
-        }
-        );
-        event.preventDefault();
+        });
+        
     }
 
-
-    render() {
-        let formInfo;
-        const formSubmit = this.state.submitted;
-
-        if (formSubmit > 0) {
-
-            console.log(this.handleSubmit);
-            formInfo =
-                <InfoShow firstname={this.state.firstname} lastname={this.state.lastname} job={this.state.job} bio={this.state.bio} email={this.state.email} phone={this.state.phone} skills={this.state.skills} />;
-        }
-
+    renderForm()
+    {
         return (
             <Container>
                 <h2>Personal Info</h2>
@@ -114,10 +103,64 @@ class InfoForm extends React.Component {
                         </Col>
                     </Row>
                 </Form>
-                <hr />
-                <Row>
-                    {formInfo}
-                </Row>
+            </Container>
+        )
+    }
+
+    renderShow()
+    {
+        return(
+            <Container>
+            <Row>
+                <Col lg="12" md="12" sm="12"><h2>Personal Information</h2></Col>
+            </Row>
+            <Row>
+                <Col lg="4" md="4" sm="12"><h4>First Name</h4></Col>
+                <Col lg="4" md="4" sm="12"><h4>Last Name</h4></Col>
+                <Col lg="4" md="4" sm="12"><h4>Job</h4></Col>
+            </Row>
+            <Row>
+                <Col lg="4" md="4" sm="12" className="Info-border">{this.state.firstname}</Col>
+                <Col lg="4" md="4" sm="12" className="Info-border">{this.state.lastname}</Col>
+                <Col lg="4" md="4" sm="12" className="Info-border">{this.state.job}</Col>
+            </Row>
+            <Row>
+                <Col lg="12" md="12" sm="12"><h4>Bio</h4></Col>
+            </Row>
+            <Row>
+                <Col lg="12" md="12" sm="12" className="Info-border">{this.state.bio}</Col>
+            </Row>        
+            <Row>
+                <Col lg="6" md="6" sm="6"><h4>Email</h4></Col>
+                <Col lg="6" md="6" sm="6"><h4>Phone</h4></Col>
+            </Row>   
+            <Row>
+                <Col lg="6" md="6" sm="6" className="Info-border">{this.state.email}</Col>
+                <Col lg="6" md="6" sm="6" className="Info-border">{this.state.phone}</Col>
+            </Row> 
+            <Row>
+                <Col lg="12" md="12" sm="12"><h4>Skills</h4></Col>
+            </Row>
+            <Row>
+                <Col lg="12" md="12" sm="12" className="Info-border">{this.state.skills}</Col>
+            </Row>
+            <br />
+            <Row>
+                <Col lg="12" md="12" sm="12">
+                    <Button color="primary" size="lg" block value="Submit" onClick={this.handleSubmit}>Edit</Button>
+                </Col>
+            </Row>
+            </Container>  
+        )
+    }
+
+
+
+    render() {
+        console.log(this.state.submitted);
+        return(
+            <Container>
+                {(this.state.submitted) ? this.renderShow() : this.renderForm()}
             </Container>
         );
     }
